@@ -49,29 +49,30 @@ sh run.sh password_user password_hadoop_strong team 176.0.0.0 192.0.0.0 192.0.0.
     5.3) Создать пользователя hadoop с надёжным паролем: sudo adduser hadoop
 
 6) На JN подключиться к пользователю hadoop: sudo -i -u hadoop
-7) Аналогично пунктам 2-4 сгенерировать и скаопировать 
+7) Аналогично пунктам 2-4 сгенерировать и скопировать ssh ключи
 8) Скачать архив с hadoop: wget https://dlcdn.apache.org/hadoop/common/hadoop-3.4.0/hadoop-3.4.0.tar.gz
 9) Скопировать его на другие ноды: scp hadoop-3.4.0.tar.gz NODE_NAME:/home/hadoop (NODE_NAME /in {nn, dn-00, dn-01})
 10) На каждой ноде (аналогично подключение по ssh, но уже можно по именам из, например, пункта 9: ssh nn):
+    10.1) Распаковать архив: tar -xzvf hadoop-3.4.0.tar.gz
 
-    10.1) Проверить наличие java соответствующей версии (8 или 11) для hadoop и установить при отсутствии
+    10.2) Проверить наличие java соответствующей версии (8 или 11) для hadoop и установить при отсутствии
 
-    10.2) Узнать директорию, в которой установлена java (обозначим $JAVA_HOME):
+    10.3) Узнать директорию, в которой установлена java (обозначим $JAVA_HOME):
 
-        10.2.1) Узнать symlink (обозначим $symlink): which java
-        10.2.2) Узнать настоящий путь: readlink -f $symlink
-        10.2.3) Скопировать домашнююдиректорию (на 2 каталога выше), например: /usr/lib/jvm/java-11-openjdk-amd64
+        10.3.1) Узнать symlink (обозначим $symlink): which java
+        10.3.2) Узнать настоящий путь: readlink -f $symlink
+        10.3.3) Скопировать домашнююдиректорию (на 2 каталога выше), например: /usr/lib/jvm/java-11-openjdk-amd64
 
-    10.3) Добавить в конец файла .profile следующие строки (для инициализации переменных окружения):
+    10.4) Добавить в конец файла .profile следующие строки (для инициализации переменных окружения):
 
         export HADOOP_HOME=/home/hadoop/hadoop-3.4.0
         export JAVA_HOME=$JAVA_HOME
         export PATH=\$PATH:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin
-    10.4) Применить изменения переменных: source .profile
+    10.5) Применить изменения переменных: source .profile
 
-    10.5) Добавить в конец файла hadoop-3.4.0/etc/hadoop/hadoop-env.sh строку export JAVA_HOME=$JAVA_HOME или в указанном месте (с закомментированной переменной JAVA_HOME) соответственно JAVA_HOME=$JAVA_HOME
+    10.6) Добавить в конец файла hadoop-3.4.0/etc/hadoop/hadoop-env.sh строку export JAVA_HOME=$JAVA_HOME или в указанном месте (с закомментированной переменной JAVA_HOME) соответственно JAVA_HOME=$JAVA_HOME
 
-    10.6) В файле hadoop-3.4.0/etc/hadoop/core-site.xml добавить конфигурацию:
+    10.7) В файле hadoop-3.4.0/etc/hadoop/core-site.xml добавить конфигурацию:
 
         <configuration>
             <property>
@@ -83,7 +84,7 @@ sh run.sh password_user password_hadoop_strong team 176.0.0.0 192.0.0.0 192.0.0.
                 </value>
             </property>
         </configuration>
-    10.7) В файле hadoop-3.4.0/etc/hadoop/hdfs-site.xml добавить конфигурацию:
+    10.8) В файле hadoop-3.4.0/etc/hadoop/hdfs-site.xml добавить конфигурацию:
 
         <configuration>
             <property>
@@ -95,7 +96,7 @@ sh run.sh password_user password_hadoop_strong team 176.0.0.0 192.0.0.0 192.0.0.
                 </value>
             </property>
         </configuration>
-    10.8) Добавить в файл hadoop-3.4.0/etc/hadoop/workers имена датанод:
+    10.9) Добавить в файл hadoop-3.4.0/etc/hadoop/workers имена датанод:
 
         nn
         dn-00
